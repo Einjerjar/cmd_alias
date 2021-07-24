@@ -8,19 +8,26 @@ const CONFIG_PATH: &str = "cmd_alias";
 const CONFIG_NAME: &str = "aliases.cmd";
 
 fn main() -> Result<(), Box<dyn std::error::Error>>{
-    let args: Vec<String> = env::args().collect();
-    let action = {
-        if args.len() < 2 {
+    let c_args: Vec<String> = env::args().collect();
+    let mut action = {
+        if c_args.len() < 2 {
             "list"
         } else {
-            &args[1].as_str()
+            &c_args[1].as_str()
         }
     };
     let args = {
-        if args.len() < 2 {
+        if c_args.len() < 2 {
+            String::new()
+        } else if c_args.len() < 3
+            && (
+                action == "set" || action == "add" ||
+                action == "del" || action == "remove"
+            ) {
+            action = "list";
             String::new()
         } else {
-            args[2..args.len()].join(" ")
+            c_args[2..c_args.len()].join(" ")
         }
     };
 
@@ -29,7 +36,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
     let config_root = config_root.join(CONFIG_PATH);
     let config_file = config_root.join(CONFIG_NAME);
     let _ = fs::create_dir_all(&config_root).unwrap();
-
 
     match action {
         "list" | "ls" => {
@@ -46,10 +52,29 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
         "load" | "source" | "silent" | "s" => {
             load_alias(&config_file);
         },
-        _ => (),
+        "help" => {
+            print_help();
+        },
+        _ => ()
     }
 
     Ok(())
+}
+
+fn print_help() {
+    println!(
+r#"
+Alias (custom-eqsue-implemetation)
+Einjerjar 2021
+
+alias [set key=value] [del key] [load]
+
+[None]      List all set aliases
+set k=v     Sets an alias
+del k       Deletes an alias
+load        Load alias silently
+"#
+    );
 }
 
 fn config_contents(config_file: &Path) -> String{
