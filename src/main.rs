@@ -64,7 +64,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
 fn print_help() {
     println!(
 r#"
-Alias (custom-eqsue-implemetation)
+Alias (custom-eqsue-implemetation) v0.1.1
 Einjerjar 2021
 
 alias [set key=value] [del key] [load]

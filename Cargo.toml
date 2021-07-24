@@ -1,6 +1,6 @@
 [package]
 name = "alias"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2018"
 authors = ["Einjerjar"]
 description = "Simple alias implementation for windows using doskey"
